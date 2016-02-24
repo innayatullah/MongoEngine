@@ -1,4 +1,4 @@
-﻿using MongoRepository.Base;
+﻿using MongoEngine.Base;
 
 namespace WebApi.DbModels
 {

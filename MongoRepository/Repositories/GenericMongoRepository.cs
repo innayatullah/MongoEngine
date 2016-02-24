@@ -1,10 +1,10 @@
 ﻿using System;
 using MongoDB.Bson;
 using MongoDB.Driver.Builders;
-using MongoRepository.Base;
-using MongoRepository.Utilities;
+using MongoEngine.Base;
+using MongoEngine.Utilities;
 
-namespace MongoRepository.Repositories
+namespace MongoEngine.Repositories
 {
     public class GenericMongoRepository<T> : BaseMongoRepository<T>
     {

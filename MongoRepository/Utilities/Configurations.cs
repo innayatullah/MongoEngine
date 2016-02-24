@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace MongoRepository.Utilities
+namespace MongoEngine.Utilities
 {
     public static class Configurations
     {

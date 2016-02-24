@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoRepository", "MongoRepository\MongoRepository.csproj", "{A20FB84C-8465-4F8F-BB96-0A9C5D3FA557}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoEngine", "MongoRepository\MongoEngine.csproj", "{A20FB84C-8465-4F8F-BB96-0A9C5D3FA557}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{B967B1A6-22B4-4446-A9DB-17B61B9F72F3}"
 	ProjectSection(ProjectDependencies) = postProject

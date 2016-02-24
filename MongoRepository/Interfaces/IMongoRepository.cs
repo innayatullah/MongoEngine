@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace MongoRepository.Interfaces
+namespace MongoEngine.Interfaces
 {
     public interface IMongoRepository<T>
     {

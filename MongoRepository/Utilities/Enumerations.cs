@@ -1,4 +1,4 @@
-﻿namespace MongoRepository.Utilities
+﻿namespace MongoEngine.Utilities
 {
     public enum Gender
     {

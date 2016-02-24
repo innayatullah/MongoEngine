@@ -3,9 +3,9 @@ using MongoDB.Driver.Builders;
 using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
-using MongoRepository.Interfaces;
+using MongoEngine.Interfaces;
 
-namespace MongoRepository.Base
+namespace MongoEngine.Base
 {
     public abstract class BaseMongoRepository<T>: IMongoRepository<T>
     {

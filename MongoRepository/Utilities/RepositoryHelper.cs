@@ -4,7 +4,7 @@ using System.Reflection;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 
-namespace MongoRepository.Utilities
+namespace MongoEngine.Utilities
 {
     public static class RepositoryHelper
     {
