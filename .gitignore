@@ -1,0 +1,25 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/WebApi/bin/Debug
+/WebApi/DbModels/UsersInRoles.cs
+/WebApi/DbModels/User.cs
+/WebApi/DbModels/Shift.cs
+/WebApi/DbModels/Roster.cs
+/WebApi/DbModels/RoomType.cs
+/WebApi/DbModels/Room.cs
+/WebApi/DbModels/Role.cs
+/WebApi/DbModels/Patient.cs
+/WebApi/DbModels/Hospital.cs
+/WebApi/DbModels/Doctor.cs
+/WebApi/DbModels/Discharge.cs
+/WebApi/DbModels/Designation.cs
+/WebApi/DbModels/ContactType.cs
+/WebApi/DbModels/Contact.cs
+/WebApi/DbModels/Appointment.cs
+/WebApi/DbModels/Admission.cs
+/WebApi/obj/Debug
+/packages
+/MongoRepository/obj/Debug
+/MongoRepository/bin/Debug
