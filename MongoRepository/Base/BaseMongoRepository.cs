@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using System;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,12 @@ namespace MongoEngine.Base
 
         protected BaseMongoRepository(string conn)
         {
-            var connArray = conn.Split(';');
-            ConnectionString = connArray[0];
-            Client = new MongoClient(ConnectionString);
+            var url = new MongoUrl(conn);
+            var client = new MongoClient(url);
 #pragma warning disable 618
-            Server = Client.GetServer();
+            var server = client.GetServer();
 #pragma warning restore 618
-            var dbName = connArray[1].Split(':');
-            Database = Server.GetDatabase(dbName[1], WriteConcern.Unacknowledged);
+            Database = server.GetDatabase(url.DatabaseName); // WriteConcern defaulted to Acknowledged
             Collection = Database.GetCollection<T>(typeof(T).Name);
         }
         

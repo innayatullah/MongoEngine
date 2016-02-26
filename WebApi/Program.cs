@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
-using MongoEngine.Repositories;
-using WebApi.DbModels;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Hosting;
+using MongoDB.AspNet.Identity;
+using WebApi.Models;
 
 namespace WebApi
 {
@@ -15,29 +15,29 @@ namespace WebApi
 
             Console.WriteLine("Starting web Server...");
             WebApp.Start<Startup>(baseUri);
-            ExecuteGenericDepartment();
+            Seed();
             Console.WriteLine("Server running at {0} - press Enter to quit. ", baseUri);
             Console.ReadLine();
         }
-
-        // ReSharper disable once UnusedMember.Local
-        private static void ExecuteGenericDepartment()
+        
+        protected static void Seed()
         {
-            var repo = new GenericMongoRepository<Department>();
-            repo.RemoveAll();
-            repo.Add(new Department
+            //  This method will be called after migrating to the latest version.
+
+            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new IdentityDbContext()));
+
+            var user = new ApplicationUser()
             {
-                Name = "Admin",
-                Description = "Administration Department"
-            });
-            var allRoles = repo.GetAll();
-            var role = allRoles.FirstOrDefault(x => x.Name == "Admin");
-            if (role != null)
-            {
-                role.Description = "Administration Department Updated";
-                repo.Update(role);
-                repo.Get(role.Id);
-            }
+                UserName = "Administrator",
+                Email = "admin@email.com",
+                EmailConfirmed = true,
+                FirstName = "Admin",
+                LastName = "Test",
+                Level = 1,
+                JoinDate = DateTime.Now.AddYears(-3)
+            };
+
+            manager.Create(user, "P@ssw0rd");
         }
     }
 }

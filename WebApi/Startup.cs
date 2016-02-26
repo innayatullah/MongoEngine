@@ -1,5 +1,6 @@
 ﻿using Owin;
 using System.Web.Http;
+using WebApi.Infrastructure;
 
 namespace WebApi
 {
@@ -10,6 +11,10 @@ namespace WebApi
         {
             var webApiConfiguration = ConfigureWebApi();
 
+            ConfigureOAuthTokenGeneration(app);
+
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
+
             // Use the extension method provided by the WebApi.Owin library:
             app.UseWebApi(webApiConfiguration);
         }
@@ -18,11 +23,19 @@ namespace WebApi
         private HttpConfiguration ConfigureWebApi()
         {
             var config = new HttpConfiguration();
-            config.Routes.MapHttpRoute(
-                "DefaultApi",
-                "api/{controller}/{action}/{id}",
-                new { id = RouteParameter.Optional });
+            config.MapHttpAttributeRoutes();
+            config.EnsureInitialized();
             return config;
+        }
+
+        private void ConfigureOAuthTokenGeneration(IAppBuilder app)
+        {
+            // Configure the db context and user manager to use a single instance per request
+            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+
+            // Plugin the OAuth bearer JSON Web Token tokens generation and Consumption will be here
+
         }
     }
 }
