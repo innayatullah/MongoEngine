@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -70,10 +71,57 @@ namespace WebApi.Controllers
                 return GetErrorResult(addUserResult);
             }
 
+            var code = await AppUserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+
+            var callbackUrl = new Uri(Url.Link("ConfirmEmailRoute", new { userId = user.Id, code }));
+
+            await AppUserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
             var locationHeader = new Uri(Url.Link("GetUserById", new { id = user.Id }));
 
             return Created(locationHeader, TheModelFactory.Create(user));
         }
 
+        [HttpGet]
+        [Route("confirmEmail", Name = "ConfirmEmailRoute")]
+        public async Task<IHttpActionResult> ConfirmEmail(string userId = "", string code = "")
+        {
+            if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(code))
+            {
+                ModelState.AddModelError("", "User Id and Code are required");
+                return BadRequest(ModelState);
+            }
+
+            var result = await AppUserManager.ConfirmEmailAsync(userId, code);
+
+            return result.Succeeded ? Ok() : GetErrorResult(result);
+        }
+
+        [Route("changePassword")]
+        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await AppUserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+
+            return result.Succeeded ? Ok() : GetErrorResult(result);
+        }
+
+        [Route("deleteUser/{id:guid}")]
+        public async Task<IHttpActionResult> DeleteUser(string id)
+        {
+            //Only SuperAdmin or Admin can delete users (Later when implement roles)
+
+            var appUser = await AppUserManager.FindByIdAsync(id);
+
+            if (appUser == null) return NotFound();
+
+            var result = await AppUserManager.DeleteAsync(appUser);
+
+            return result.Succeeded ? Ok() : GetErrorResult(result);
+        }
     }
 }
