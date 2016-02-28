@@ -1,6 +1,14 @@
-﻿using Owin;
+﻿using System;
+using Owin;
 using System.Web.Http;
+using Microsoft.Owin;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataHandler.Encoder;
+using Microsoft.Owin.Security.Jwt;
+using Microsoft.Owin.Security.OAuth;
 using WebApi.Infrastructure;
+using WebApi.Providers;
+using JwtFormat = WebApi.Providers.JwtFormat;
 
 namespace WebApi
 {
@@ -12,6 +20,7 @@ namespace WebApi
             var webApiConfiguration = ConfigureWebApi();
 
             ConfigureOAuthTokenGeneration(app);
+            ConfigureOAuthTokenConsumption(app);
 
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
@@ -34,8 +43,36 @@ namespace WebApi
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
 
-            // Plugin the OAuth bearer JSON Web Token tokens generation and Consumption will be here
+            var oAuthServerOptions = new OAuthAuthorizationServerOptions()
+            {
+                //For Dev enviroment only (on production should be AllowInsecureHttp = false)
+                AllowInsecureHttp = true,
+                TokenEndpointPath = new PathString("/oauth/token"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+                Provider = new OAuthProvider(),
+                AccessTokenFormat = new JwtFormat(Common.Configurations.Issuer)
+            };
 
+            // OAuth 2.0 Bearer Access Token Generation
+            app.UseOAuthAuthorizationServer(oAuthServerOptions);
+        }
+
+        private void ConfigureOAuthTokenConsumption(IAppBuilder app)
+        {
+            var audienceId = Common.Configurations.AudianceId;
+            var audienceSecret = TextEncodings.Base64Url.Decode(Common.Configurations.AudianceSecret);
+
+            // Api controllers with an [Authorize] attribute will be validated with JWT
+            app.UseJwtBearerAuthentication(
+                new JwtBearerAuthenticationOptions
+                {
+                    AuthenticationMode = AuthenticationMode.Active,
+                    AllowedAudiences = new[] { audienceId },
+                    IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
+                    {
+                        new SymmetricKeyIssuerSecurityTokenProvider(Common.Configurations.Issuer, audienceSecret)
+                    }
+                });
         }
     }
 }

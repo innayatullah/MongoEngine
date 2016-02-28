@@ -54,5 +54,6 @@ namespace WebApi.Infrastructure
 
             return appUserManager;
         }
+
     }
 }

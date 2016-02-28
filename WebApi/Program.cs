@@ -11,7 +11,7 @@ namespace WebApi
         // ReSharper disable once UnusedParameter.Local
         static void Main(string[] args)
         {
-            var baseUri = "http://localhost:8080";
+            var baseUri = Common.Configurations.ApplicationDomain;
 
             Console.WriteLine("Starting web Server...");
             WebApp.Start<Startup>(baseUri);
