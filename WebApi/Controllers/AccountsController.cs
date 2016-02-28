@@ -10,13 +10,14 @@ namespace WebApi.Controllers
     [RoutePrefix("api/accounts")]
     public class AccountsController : BaseApiController
     {
-
+        [Authorize]
         [Route("users")]
         public IHttpActionResult GetUsers()
         {
             return Ok(AppUserManager.Users.ToList().Select(u => TheModelFactory.Create(u)));
         }
 
+        [Authorize]
         [Route("user/{id:guid}", Name = "GetUserById")]
         public async Task<IHttpActionResult> GetUser(string id)
         {
@@ -31,6 +32,7 @@ namespace WebApi.Controllers
 
         }
 
+        [Authorize]
         [Route("user/{username}")]
         public async Task<IHttpActionResult> GetUserByName(string username)
         {
@@ -45,6 +47,7 @@ namespace WebApi.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("create")]
         public async Task<IHttpActionResult> CreateUser(CreateUserBindingModel createUserModel)
@@ -82,6 +85,7 @@ namespace WebApi.Controllers
             return Created(locationHeader, TheModelFactory.Create(user));
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("confirmEmail", Name = "ConfirmEmailRoute")]
         public async Task<IHttpActionResult> ConfirmEmail(string userId = "", string code = "")
@@ -97,6 +101,7 @@ namespace WebApi.Controllers
             return result.Succeeded ? Ok() : GetErrorResult(result);
         }
 
+        [Authorize]
         [Route("changePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -110,6 +115,7 @@ namespace WebApi.Controllers
             return result.Succeeded ? Ok() : GetErrorResult(result);
         }
 
+        [Authorize]
         [Route("deleteUser/{id:guid}")]
         public async Task<IHttpActionResult> DeleteUser(string id)
         {

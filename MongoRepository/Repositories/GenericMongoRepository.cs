@@ -1,5 +1,4 @@
 ﻿using System;
-using Common;
 using MongoDB.Bson;
 using MongoDB.Driver.Builders;
 using MongoEngine.Base;
@@ -9,7 +8,7 @@ namespace MongoEngine.Repositories
 {
     public class GenericMongoRepository<T> : BaseMongoRepository<T>
     {
-        public GenericMongoRepository() : base(Configurations.ConnectionString)
+        public GenericMongoRepository() : base(Common.Configurations.ConnectionString)
         {
         }
 
